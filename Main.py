@@ -40,7 +40,7 @@ def readCam():
 
 def toYCRCB(img):
     frame1 = cv2.resize(img,(640, 480), interpolation = cv2.INTER_CUBIC)
-    frame1 = cv2.cvtColor(img, cv2.COLOR_BGR2YCrCb)
+    frame1 = cv2.cvtColor(img, cv2.COLOR_BGR2YCR_CB)
 
 def findCountours(contours):
  ci = 0
@@ -63,14 +63,14 @@ def findCountours(contours):
 
  return handContour
 
-cv2.ocl.setUseOpenCL(False)
+#cv2.ocl.setUseOpenCL(False)
 cap = cv2.VideoCapture(0)
 pozadina = readCam()
 toYCRCB(pozadina)
 
 while(1):
  frameOrig = readCam()
- frame = cv2.cvtColor(frameOrig, cv2.COLOR_BGR2YCrCb)
+ frame = cv2.cvtColor(frameOrig, cv2.COLOR_BGR2YCR_CB)
 
  fgmask = subtraction(frame, pozadina)
 
@@ -80,7 +80,7 @@ while(1):
  cv2.imshow('frameorigin',cr)
 
  #Pronalazenje kontura
- _, contours, hierarchy = cv2.findContours(cr,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
+ contours, hierarchy = cv2.findContours(cr,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
  handContour = findCountours(contours)
  cv2.drawContours(frameOrig,[handContour],0,(0,255,0),1)
 
