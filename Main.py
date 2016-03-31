@@ -176,25 +176,30 @@ print(result)
 print(display_result(result, alphabet))
 
 
-i=10
-framesTest = []
+i=20
+regionsTest = []
 while(1):
-
+ i = i - 1
  frameOrig = readCam()
  frame = cv2.cvtColor(frameOrig, cv2.COLOR_BGR2YCR_CB)
-
  fgmask = subtraction(frame, pozadina)
-
  cr = split_img(fgmask)
+
  cv2.imshow('frameorigin',cr)
 
  #Pronalazenje kontura
- contours, hierarchy = cv2.findContours(cr,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
- handContour = findCountours(contours)
+ contours, _ = cv2.findContours(cr,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
+ handContour = findCountours(contours) #originalna kontura koja nam je potrebna za prikazivanje na slici
+ pom = resize_region(handContour) #resizovana kontura koja nam je potrebna za NN
  cv2.drawContours(frameOrig,[handContour],0,(0,255,0),1)
+ regionsTest.append(pom)
 
- #if(i!=0):
-
+ if(i==0):
+     i = 20
+     inputT = prepareAnn(regionsTest)
+     result = ann.predict(np.array(inputT))
+     print(display_result(result,alphabet))
+     regionsTest = []
 
  cv2.imshow('frame1',frameOrig)
 
